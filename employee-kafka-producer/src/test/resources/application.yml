@@ -1,0 +1,24 @@
+# common spring configuration
+spring:
+  datasource:
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+  #  kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    topic:
+      employees-for-saving: EMPLOYEES_FOR_SAVING_TOPIC
+      employees-for-check: EMPLOYEES_FOR_CHECK_TOPIC
+      employees-for-approval: EMPLOYEES_FOR_APPROVAL_TOPIC
+      employees-for-activation: EMPLOYEES_FOR_ACTIVATION_TOPIC
+    group: Employees
+
+# spring logging settings
+logging:
+  level:
+    org:
+      springframework:
+        cloud: debug
+        web: debug

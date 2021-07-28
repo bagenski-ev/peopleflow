@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+
+  zookeeper:
+    image: zookeeper
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+    depends_on:
+      - zookeeper
+
+  db:
+    image: postgres:13.1-alpine
+    container_name: db
+    environment:
+      POSTGRES_USER: compose-postgres
+      POSTGRES_PASSWORD: compose-postgres
+    ports:
+      - 5432:5432
+
+  employee-kafka-producer:
+    image: bagenskij/peopleflow-employee-kafka-producer:latest
+    ports:
+      - 8083:8083
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      POSTGRES_USER: compose-postgres
+      POSTGRES_PASSWORD: compose-postgres
+      DATASOURCE_URL: jdbc:postgresql://db:5432/compose-postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+    depends_on:
+      - kafka
+      - db
+      - employee-kafka-consumer
+
+  employee-kafka-consumer:
+    image: bagenskij/peopleflow-employee-kafka-consumer:latest
+    ports:
+      - 8084:8084
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      POSTGRES_USER: compose-postgres
+      POSTGRES_PASSWORD: compose-postgres
+      DATASOURCE_URL: jdbc:postgresql://db:5432/compose-postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    depends_on:
+      - kafka
+      - db
+
+
+

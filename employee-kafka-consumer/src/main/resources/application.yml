@@ -1,0 +1,44 @@
+# web configuration
+server:
+  port: 8084
+
+# common spring configuration
+spring:
+  #  metadata
+  application:
+    name: peopleflow-employee-service
+  #    jpa
+  jpa:
+    properties:
+      javax:
+        validation:
+          mode: callback
+    #    hibernate:
+    #      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}
+    show-sql: true
+  #  datasource
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:1111}
+  database: org.hibernate.dialect.PostgreSQLDialect
+  #  kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    topic:
+      employees-for-saving: EMPLOYEES_FOR_SAVING_TOPIC
+      employees-for-check: EMPLOYEES_FOR_CHECK_TOPIC
+      employees-for-approval: EMPLOYEES_FOR_APPROVAL_TOPIC
+      employees-for-activation: EMPLOYEES_FOR_ACTIVATION_TOPIC
+    group: Employees
+  sql:
+    init:
+      mode: never
+
+# spring logging settings
+logging:
+  level:
+    org:
+      springframework:
+        cloud: debug
+        web: debug
