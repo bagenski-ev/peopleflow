@@ -30,13 +30,6 @@ spring:
       employees-for-check: EMPLOYEES_FOR_CHECK_TOPIC
       employees-for-approval: EMPLOYEES_FOR_APPROVAL_TOPIC
       employees-for-activation: EMPLOYEES_FOR_ACTIVATION_TOPIC
-    test:
-      topic: embedded-test-topic
-
-## swagger settings
-#springdoc:
-#  swagger-ui:
-#    path: /employee-swagger-ui
 
 # spring logging settings
 logging:

@@ -14,7 +14,6 @@ spring:
         validation:
           mode: callback
     #    hibernate:
-    #      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}
     show-sql: true
   #  datasource
   datasource:

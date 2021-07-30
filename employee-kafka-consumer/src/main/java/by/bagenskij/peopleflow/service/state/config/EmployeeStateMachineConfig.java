@@ -1,9 +1,9 @@
-package by.bagenskij.peopleflow.config;
+package by.bagenskij.peopleflow.service.state.config;
 
 import by.bagenskij.peopleflow.dao.model.enums.EmployeeState;
-import by.bagenskij.peopleflow.service.state.EmployeeEvent;
-import by.bagenskij.peopleflow.service.state.InMemoryStateMachinePersister;
-import by.bagenskij.peopleflow.service.state.UpdateEmployeeStateAction;
+import by.bagenskij.peopleflow.service.state.action.UpdateEmployeeStateAction;
+import by.bagenskij.peopleflow.service.state.event.EmployeeEvent;
+import by.bagenskij.peopleflow.service.state.persister.InMemoryStateMachinePersister;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -23,7 +23,7 @@ public class LocalDateComparisonValidatorTest {
   @Mock private ConstraintValidatorContext mockConstraintValidatorContext;
 
   @Test
-  public void testIsValidSuccessWithCorrectDateValues() {
+  public void test_is_valid_success_with_correct_date_values() {
     when(mockLocalDateComparisonAnnotation.earlierLocalDateFieldName()).thenReturn("startDate");
     when(mockLocalDateComparisonAnnotation.comparedLocalDateFieldName()).thenReturn("endDate");
 
@@ -40,7 +40,7 @@ public class LocalDateComparisonValidatorTest {
   }
 
   @Test
-  public void testIsValidNotSuccessWithIncorrectDateValues() {
+  public void test_is_valid_not_success_with_incorrect_date_values() {
     when(mockLocalDateComparisonAnnotation.earlierLocalDateFieldName()).thenReturn("startDate");
     when(mockLocalDateComparisonAnnotation.comparedLocalDateFieldName()).thenReturn("endDate");
 
@@ -57,7 +57,7 @@ public class LocalDateComparisonValidatorTest {
   }
 
   @Test
-  public void testIsValidNotSuccessWithEqualsDateValues() {
+  public void test_is_valid_not_success_with_equals_date_values() {
     when(mockLocalDateComparisonAnnotation.earlierLocalDateFieldName()).thenReturn("startDate");
     when(mockLocalDateComparisonAnnotation.comparedLocalDateFieldName()).thenReturn("endDate");
 

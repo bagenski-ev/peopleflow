@@ -1,4 +1,4 @@
-package by.bagenskij.peopleflow.service.state;
+package by.bagenskij.peopleflow.service.state.event;
 
 public enum EmployeeEvent {
   CHECK,

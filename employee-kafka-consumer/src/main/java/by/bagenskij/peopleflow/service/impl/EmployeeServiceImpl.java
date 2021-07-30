@@ -4,8 +4,8 @@ import by.bagenskij.peopleflow.dao.model.Employee;
 import by.bagenskij.peopleflow.dao.model.enums.EmployeeState;
 import by.bagenskij.peopleflow.dao.repository.EmployeeRepository;
 import by.bagenskij.peopleflow.service.EmployeeService;
-import by.bagenskij.peopleflow.service.state.EmployeeEvent;
-import by.bagenskij.peopleflow.service.state.EmployeeStateMachineProcessor;
+import by.bagenskij.peopleflow.service.state.event.EmployeeEvent;
+import by.bagenskij.peopleflow.service.state.processor.EmployeeStateProcessorImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmployeeServiceImpl extends AbstractService<Employee, Long, EmployeeRepository>
     implements EmployeeService {
 
-  private final EmployeeStateMachineProcessor employeeStateMachineProcessor;
+  private final EmployeeStateProcessorImpl employeeStateProcessorImpl;
 
   protected EmployeeServiceImpl(
-      EmployeeRepository repository, EmployeeStateMachineProcessor employeeStateMachineProcessor) {
+          EmployeeRepository repository, EmployeeStateProcessorImpl employeeStateProcessorImpl) {
     super(repository);
-    this.employeeStateMachineProcessor = employeeStateMachineProcessor;
+    this.employeeStateProcessorImpl = employeeStateProcessorImpl;
   }
 
   @Transactional
@@ -31,18 +31,18 @@ public class EmployeeServiceImpl extends AbstractService<Employee, Long, Employe
   @Transactional
   @Override
   public void check(Long id) throws Exception {
-    employeeStateMachineProcessor.process(id, EmployeeEvent.CHECK);
+    employeeStateProcessorImpl.process(id, EmployeeEvent.CHECK);
   }
 
   @Transactional
   @Override
   public void approve(Long id) throws Exception {
-    employeeStateMachineProcessor.process(id, EmployeeEvent.APPROVE);
+    employeeStateProcessorImpl.process(id, EmployeeEvent.APPROVE);
   }
 
   @Transactional
   @Override
   public void activate(Long id) throws Exception {
-    employeeStateMachineProcessor.process(id, EmployeeEvent.ACTIVATE);
+    employeeStateProcessorImpl.process(id, EmployeeEvent.ACTIVATE);
   }
 }

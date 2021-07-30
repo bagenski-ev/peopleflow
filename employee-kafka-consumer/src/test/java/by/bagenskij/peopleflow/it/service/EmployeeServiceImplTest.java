@@ -3,7 +3,7 @@ package by.bagenskij.peopleflow.it.service;
 import by.bagenskij.peopleflow.dao.model.Employee;
 import by.bagenskij.peopleflow.dao.model.enums.EmployeeState;
 import by.bagenskij.peopleflow.dao.repository.EmployeeRepository;
-import by.bagenskij.peopleflow.service.state.EmployeeEvent;
+import by.bagenskij.peopleflow.service.state.event.EmployeeEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,8 +15,9 @@ import org.springframework.statemachine.test.StateMachineTestPlanBuilder;
 
 import java.util.Optional;
 
+import static by.bagenskij.peopleflow.Constants.EMPLOYEE_ID_HEADER;
 import static by.bagenskij.peopleflow.dao.model.enums.EmployeeState.*;
-import static by.bagenskij.peopleflow.service.state.EmployeeEvent.*;
+import static by.bagenskij.peopleflow.service.state.event.EmployeeEvent.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -31,7 +32,7 @@ public class EmployeeServiceImplTest {
   public void test_employee_state_change_from_initial_to_end_success() throws Exception {
     StateMachine<EmployeeState, EmployeeEvent> machine = stateMachineFactory.getStateMachine();
     Long employeeId = 1L;
-    machine.getExtendedState().getVariables().put("employeeId", employeeId);
+    machine.getExtendedState().getVariables().put(EMPLOYEE_ID_HEADER, employeeId);
 
     when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(new Employee()));
 
@@ -61,5 +62,4 @@ public class EmployeeServiceImplTest {
             .build();
     plan.test();
   }
-
 }

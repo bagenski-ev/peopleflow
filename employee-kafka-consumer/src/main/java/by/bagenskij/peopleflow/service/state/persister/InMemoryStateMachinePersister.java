@@ -1,6 +1,7 @@
-package by.bagenskij.peopleflow.service.state;
+package by.bagenskij.peopleflow.service.state.persister;
 
 import by.bagenskij.peopleflow.dao.model.enums.EmployeeState;
+import by.bagenskij.peopleflow.service.state.event.EmployeeEvent;
 import org.springframework.statemachine.StateMachineContext;
 import org.springframework.statemachine.StateMachinePersist;
 import org.springframework.stereotype.Component;

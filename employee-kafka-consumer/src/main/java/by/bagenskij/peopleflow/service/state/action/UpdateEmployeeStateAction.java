@@ -1,8 +1,9 @@
-package by.bagenskij.peopleflow.service.state;
+package by.bagenskij.peopleflow.service.state.action;
 
 import by.bagenskij.peopleflow.dao.model.Employee;
 import by.bagenskij.peopleflow.dao.model.enums.EmployeeState;
 import by.bagenskij.peopleflow.dao.repository.EmployeeRepository;
+import by.bagenskij.peopleflow.service.state.event.EmployeeEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+
+import static by.bagenskij.peopleflow.Constants.EMPLOYEE_ID_HEADER;
 
 @Slf4j
 @Component
@@ -25,7 +28,12 @@ public class UpdateEmployeeStateAction implements Action<EmployeeState, Employee
   @Transactional
   public void execute(StateContext<EmployeeState, EmployeeEvent> stateContext) {
     Long employeeId =
-        (Long) stateContext.getStateMachine().getExtendedState().getVariables().get("employeeId");
+        (Long)
+            stateContext
+                .getStateMachine()
+                .getExtendedState()
+                .getVariables()
+                .get(EMPLOYEE_ID_HEADER);
     try {
       Employee employee = employeeRepository.findById(employeeId).orElseThrow();
       EmployeeState state = stateContext.getTarget().getId();

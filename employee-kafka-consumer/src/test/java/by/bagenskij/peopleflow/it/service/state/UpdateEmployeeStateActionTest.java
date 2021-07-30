@@ -3,8 +3,8 @@ package by.bagenskij.peopleflow.it.service.state;
 import by.bagenskij.peopleflow.dao.model.Employee;
 import by.bagenskij.peopleflow.dao.model.enums.EmployeeState;
 import by.bagenskij.peopleflow.dao.repository.EmployeeRepository;
-import by.bagenskij.peopleflow.service.state.EmployeeEvent;
-import by.bagenskij.peopleflow.service.state.UpdateEmployeeStateAction;
+import by.bagenskij.peopleflow.service.state.action.UpdateEmployeeStateAction;
+import by.bagenskij.peopleflow.service.state.event.EmployeeEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
+import static by.bagenskij.peopleflow.Constants.EMPLOYEE_ID_HEADER;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -39,7 +40,7 @@ public class UpdateEmployeeStateActionTest {
     employee.setId(employeeId);
     employee.setState(EmployeeState.ADDED);
 
-    when(stateContext.getStateMachine().getExtendedState().getVariables().get("employeeId"))
+    when(stateContext.getStateMachine().getExtendedState().getVariables().get(EMPLOYEE_ID_HEADER))
         .thenReturn(employeeId);
     when(stateContext.getTarget().getId()).thenReturn(EmployeeState.IN_CHECK);
     when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
@@ -54,7 +55,7 @@ public class UpdateEmployeeStateActionTest {
   public void update_unknown_employee_state_action_test_success() {
     Long unknownEmployeeId = 1L;
 
-    when(stateContext.getStateMachine().getExtendedState().getVariables().get("employeeId"))
+    when(stateContext.getStateMachine().getExtendedState().getVariables().get(EMPLOYEE_ID_HEADER))
         .thenReturn(unknownEmployeeId);
     when(employeeRepository.findById(unknownEmployeeId)).thenReturn(Optional.empty());
 

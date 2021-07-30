@@ -4,8 +4,8 @@ import by.bagenskij.peopleflow.dao.model.Employee;
 import by.bagenskij.peopleflow.dao.model.enums.EmployeeState;
 import by.bagenskij.peopleflow.dao.repository.EmployeeRepository;
 import by.bagenskij.peopleflow.service.impl.EmployeeServiceImpl;
-import by.bagenskij.peopleflow.service.state.EmployeeEvent;
-import by.bagenskij.peopleflow.service.state.EmployeeStateMachineProcessor;
+import by.bagenskij.peopleflow.service.state.event.EmployeeEvent;
+import by.bagenskij.peopleflow.service.state.processor.EmployeeStateProcessorImpl;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,12 +13,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static by.bagenskij.peopleflow.dao.model.enums.EmployeeState.*;
+import static by.bagenskij.peopleflow.service.state.event.EmployeeEvent.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceImplTest {
 
-  @Mock private EmployeeStateMachineProcessor mockEmployeeStateMachineProcessor;
+  @Mock private EmployeeStateProcessorImpl mockEmployeeStateProcessorImpl;
   @Mock private EmployeeRepository mockEmployeeRepository;
   @InjectMocks private EmployeeServiceImpl employeeServiceIml;
 
@@ -28,7 +30,7 @@ public class EmployeeServiceImplTest {
 
     employeeServiceIml.add(mockEmployee);
 
-    verify(mockEmployee, times(1)).setState(EmployeeState.ADDED);
+    verify(mockEmployee, times(1)).setState(ADDED);
     verify(mockEmployeeRepository, times(1)).save(mockEmployee);
   }
 
@@ -39,7 +41,7 @@ public class EmployeeServiceImplTest {
 
     employeeServiceIml.check(employeeId);
 
-    verify(mockEmployeeStateMachineProcessor, times(1)).process(employeeId, EmployeeEvent.CHECK);
+    verify(mockEmployeeStateProcessorImpl, times(1)).process(employeeId, CHECK);
   }
 
   @SneakyThrows
@@ -49,7 +51,7 @@ public class EmployeeServiceImplTest {
 
     employeeServiceIml.approve(employeeId);
 
-    verify(mockEmployeeStateMachineProcessor, times(1)).process(employeeId, EmployeeEvent.APPROVE);
+    verify(mockEmployeeStateProcessorImpl, times(1)).process(employeeId, APPROVE);
   }
 
   @SneakyThrows
@@ -59,6 +61,6 @@ public class EmployeeServiceImplTest {
 
     employeeServiceIml.activate(employeeId);
 
-    verify(mockEmployeeStateMachineProcessor, times(1)).process(employeeId, EmployeeEvent.ACTIVATE);
+    verify(mockEmployeeStateProcessorImpl, times(1)).process(employeeId, ACTIVATE);
   }
 }

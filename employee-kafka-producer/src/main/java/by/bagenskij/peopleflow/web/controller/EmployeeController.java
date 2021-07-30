@@ -8,13 +8,14 @@ import by.bagenskij.peopleflow.web.dto.model.employee.SavingEmployeeDto;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestController
@@ -54,7 +55,7 @@ public class EmployeeController {
       @Valid @RequestBody @ApiParam(value = "The Saving Employee")
           SavingEmployeeDto savingEmployeeDto) {
     kafkaProducer.send(employeeForSavingTopic, savingEmployeeDto);
-    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    return ResponseEntity.status(ACCEPTED).build();
   }
 
   @PutMapping("/{id}/check")
@@ -65,7 +66,7 @@ public class EmployeeController {
   public ResponseEntity<Void> checkEmployee(
       @PathVariable("id") @ApiParam(value = "The Employee ID", example = "1") Long id) {
     kafkaProducer.send(employeeCheckedTopic, id);
-    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    return ResponseEntity.status(ACCEPTED).build();
   }
 
   @PutMapping("/{id}/approve")
@@ -77,7 +78,7 @@ public class EmployeeController {
   public ResponseEntity<Void> approveEmployee(
       @PathVariable("id") @ApiParam(value = "The Employee ID", example = "1") Long id) {
     kafkaProducer.send(employeesForApprovalTopic, id);
-    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    return ResponseEntity.status(ACCEPTED).build();
   }
 
   @PutMapping("/{id}/activate")
@@ -89,14 +90,14 @@ public class EmployeeController {
   public ResponseEntity<Void> activateEmployee(
       @PathVariable("id") @ApiParam(value = "The Employee ID", example = "1") Long id) {
     kafkaProducer.send(employeesForActivationTopic, id);
-    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    return ResponseEntity.status(ACCEPTED).build();
   }
 
   @GetMapping
   @ApiOperation(value = "Get All Employees", notes = "Get all Employees")
   @ApiResponse(code = 200, message = "All employees were received successfully")
   public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
-    return ResponseEntity.status(HttpStatus.OK).body(employeeMapper.map(employeeService.findAll()));
+    return ResponseEntity.status(OK).body(employeeMapper.map(employeeService.findAll()));
   }
 
   @GetMapping("/{id}")
@@ -109,11 +110,10 @@ public class EmployeeController {
   public ResponseEntity<EmployeeDto> getEmployee(
       @PathVariable("id") @ApiParam(value = "The Employee ID", example = "1") Long id) {
     try {
-      return ResponseEntity.status(HttpStatus.OK)
-          .body(employeeMapper.map(employeeService.findById(id)));
+      return ResponseEntity.status(OK).body(employeeMapper.map(employeeService.findById(id)));
     } catch (NoSuchElementException e) {
       log.error(String.format("No employee with id=%d", id), e);
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      return ResponseEntity.status(NOT_FOUND).build();
     }
   }
 }
